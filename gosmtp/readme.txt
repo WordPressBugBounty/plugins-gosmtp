@@ -4,7 +4,7 @@ Tags: smtp, wordpress smtp, gmail smtp, sendgrid smtp, aws smtp, gmail, outlook,
 Requires at least: 5.5
 Tested up to: 6.6
 Requires PHP: 5.5
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -81,6 +81,10 @@ Go To your WordPress install -> Plugins -> Add New Button -> In Search Box searc
 4. **Email Logs Wizard** check the emails sent with this wizard.
 
 == Changelog ==
+
+= 1.0.8 (September 26, 2024) =
+* [Task] Minor structural improvements.
+* [Task] Improved License handling.
 
 = 1.0.7 (July 17, 2024) =
 * [Task] Structural changes in the plugin.
