@@ -79,7 +79,7 @@ class Abilities{
 
 		// Status probes (kept cheap; safe to run on each render).
 		$abilities_api_available = function_exists('wp_register_ability');
-		$adapter_active = class_exists('\WP\MCP\Core\McpAdapter');
+		$adapter_active = is_plugin_active('mcp-adapter/mcp-adapter.php');
 		$adapter_installed = '' !== self::get_installed_mcp_adapter_file();
 		$has_app_password = self::current_user_has_mcp_app_password();
 		$test_status = self::get_test_connection_status();

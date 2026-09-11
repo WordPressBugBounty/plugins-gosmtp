@@ -2,9 +2,9 @@
 Contributors: softaculous, pagelayer
 Tags: smtp, wordpress smtp, gmail smtp, sendgrid smtp, aws smtp, gmail, outlook, zoho, aws, postmark, sparkpost, mail, mailer, phpmailer, wp_mail, email, mailgun, sendgrid, gmail, sendinblue, wp smtp, sendlayer
 Requires at least: 5.5
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 5.5
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,11 @@ Go To your WordPress install -> Plugins -> Add New Button -> In Search Box searc
 4. **Email Logs Wizard** check the emails sent with this wizard.
 
 == Changelog ==
+
+= 1.2.2 (September 11, 2026) =
+* [Improvement Pro] GoSMTP now supports Resend's reply_to parameter.
+* [Bug-Fix] There was an issue with MCP plugin detection in certain cases that has been fixed.
+* [Task] Tested with WordPress 7.1.
 
 = 1.2.1 (August 11, 2026) =
 * [Pro-Feature] Support for Pro AI Abilities: List Email Logs, Export Email Logs, Get Log Details, Resend Email Logs, and Email Reports.
