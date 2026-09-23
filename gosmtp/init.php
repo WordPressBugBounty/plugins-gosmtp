@@ -9,7 +9,7 @@
 if (!defined('ABSPATH')) exit;
 
 define('GOSMTP_BASE', plugin_basename(GOSMTP_FILE));
-define('GOSMTP_VERSION', '1.2.2');
+define('GOSMTP_VERSION', '1.2.3');
 define('GOSMTP_DIR', dirname(GOSMTP_FILE));
 define('GOSMTP_SLUG', 'gosmtp');
 define('GOSMTP_URL', plugins_url('', GOSMTP_FILE));
@@ -259,9 +259,11 @@ function gosmtp_admin_menu() {
 	
 	// Test Mail Page
 	add_submenu_page( 'gosmtp', 'Test Mail', 'Test Mail', $capability, 'gosmtp#test-mail', 'gosmtp_page_handler');
-
-	// AI Abilities
-	add_submenu_page( 'gosmtp', __('AI Abilities', 'gosmtp'), __('AI Abilities', 'gosmtp') . ' <span  style="vertical-align:middle;background:#d63638;font-size:9px;padding:0 6px;border-radius:10px;line-height:18px;">New!</span>' , $capability, 'gosmtp-ai-abilities', 'gosmtp_ai_abilities');
+	
+	if(!defined('SITEPAD')){
+		// AI Abilities
+		add_submenu_page( 'gosmtp', __('AI Abilities', 'gosmtp'), __('AI Abilities', 'gosmtp') . ' <span  style="vertical-align:middle;background:#d63638;font-size:9px;padding:0 6px;border-radius:10px;line-height:18px;">New!</span>' , $capability, 'gosmtp-ai-abilities', 'gosmtp_ai_abilities');
+	}
 	
 	if(defined('GOSMTP_PREMIUM')){
 		

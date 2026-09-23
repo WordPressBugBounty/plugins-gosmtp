@@ -7,7 +7,13 @@ if(!defined('ABSPATH')){
 
 function gosmtp_admin_hooks(){
 	
-	if(!current_user_can('manage_options') || defined('SITEPAD')){
+	if(!current_user_can('manage_options')){
+		return;
+	}
+	
+	add_action('admin_enqueue_scripts', 'gosmtp_admin_enqueue');
+	
+	if(defined('SITEPAD')){
 		return;
 	}
 
@@ -28,8 +34,6 @@ function gosmtp_admin_hooks(){
 		add_filter('softaculous_plugin_update_notice', 'gosmtp_plugin_update_notice_filter');
 	}
 	// === Plugin Update Notice === //
-
-	add_action('admin_enqueue_scripts', 'gosmtp_admin_enqueue');
 }
 
 function gosmtp_admin_enqueue(){

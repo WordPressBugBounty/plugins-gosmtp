@@ -4,7 +4,7 @@ Tags: smtp, wordpress smtp, gmail smtp, sendgrid smtp, aws smtp, gmail, outlook,
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.5
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,9 @@ Go To your WordPress install -> Plugins -> Add New Button -> In Search Box searc
 4. **Email Logs Wizard** check the emails sent with this wizard.
 
 == Changelog ==
+
+= 1.2.3 (September 23, 2026) =
+* [Improvement Pro] Added Code Signing: Every update now verifies the code signature to ensure secure updates.
 
 = 1.2.2 (September 11, 2026) =
 * [Improvement Pro] GoSMTP now supports Resend's reply_to parameter.
