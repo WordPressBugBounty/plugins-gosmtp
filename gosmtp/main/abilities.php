@@ -30,9 +30,8 @@ class Abilities{
 	static $APP_PASSWORD_NAME = 'GoSMTP AI Agents';
 	static $APP_PASSWORD_APP_ID = 'gosmtp-mcp';
 
-	// GitHub release endpoint for the official WordPress MCP Adapter plugin.
-	static $MCP_ADAPTER_RELEASE_URL = 'https://api.github.com/repos/WordPress/mcp-adapter/releases/latest';
-	static $MCP_ADAPTER_RELEASE_CACHE = 'gosmtp_mcp_adapter_release';
+	// WordPress.org slug of the official MCP Adapter plugin.
+	static $MCP_ADAPTER_SLUG = 'mcp-adapter';
 
 	// REST endpoint (provided by the adapter / WP 6.9+) used to test the connection.
 	static $ABILITIES_ENDPOINT = '/wp-json/wp-abilities/v1/abilities';
@@ -68,7 +67,6 @@ class Abilities{
 			'i18n'         => [
 				'installing'    => esc_html__('Installing...', 'gosmtp'),
 				'activating'    => esc_html__('Activating...', 'gosmtp'),
-				'updating'     => esc_html__('Updating...', 'gosmtp'),
 				'generating'    => esc_html__('Generating...', 'gosmtp'),
 				'testing'       => esc_html__('Testing...', 'gosmtp'),
 				'genErrTitle'   => esc_html__('Could not generate the password.', 'gosmtp'),
@@ -89,18 +87,6 @@ class Abilities{
 		$username = function_exists('wp_get_current_user') ? wp_get_current_user()->user_login : '';
 		$app_pass_placeholder = esc_html__('your-application-password', 'gosmtp');
 		$user_placeholder = $username ? $username : esc_html__('<your-username>', 'gosmtp');
-		$adapter_installed_version = $adapter_installed ? self::get_installed_mcp_adapter_version() : '';
-		$adapter_latest_version = '';
-		$adapter_update_available = false;
-
-		if($adapter_installed && $adapter_installed_version){
-			$release = self::get_mcp_adapter_release();
-			if(!empty($release['version']) && version_compare($release['version'], $adapter_installed_version, '>')){
-				$adapter_latest_version = $release['version'];
-				$adapter_update_available = true;
-			}
-		}
-		
 		?>
 		<div class="wrap gosmtp-abilities-root">
 
@@ -222,10 +208,6 @@ class Abilities{
 								<?php
 									if($adapter_active){
 										echo '<p>' . esc_html__('The MCP Adapter plugin is installed and active. Your site now exposes an MCP server that AI clients can connect to.', 'gosmtp') . '</p>';
-										if($adapter_update_available){
-											echo '<p class="gosmtp-abilities-adapter-update-notice">' . sprintf(esc_html__('A newer version of the MCP Adapter is available (installed: %1$s, latest: %2$s).', 'gosmtp'), '<strong>' . esc_html($adapter_installed_version) . '</strong>', '<strong>' . esc_html($adapter_latest_version) . '</strong>') . '</p>';
-											echo '<button type="button" class="button button-primary gosmtp-abilities-btn gosmtp-abilities-adapter-btn" data-action="update">' . esc_html__('Update MCP Adapter', 'gosmtp') . '</button>';
-										}
 									}elseif($adapter_installed){
 										echo '<p>' . esc_html__('The MCP Adapter is installed but not active. Activate it to enable the MCP server.', 'gosmtp') . '</p>';
 										echo '<button type="button" class="button button-primary gosmtp-abilities-btn gosmtp-abilities-adapter-btn" data-action="activate">' . esc_html__('Activate MCP Adapter', 'gosmtp') . '</button>';
@@ -314,7 +296,6 @@ class Abilities{
 									'copied'        => esc_html__('Copied!', 'gosmtp'),
 									'installing'    => esc_html__('Installing...', 'gosmtp'),
 									'activating'    => esc_html__('Activating...', 'gosmtp'),
-									'updating'     => esc_html__('Updating...', 'gosmtp'),
 									'generating'    => esc_html__('Generating...', 'gosmtp'),
 									'testing'       => esc_html__('Testing...', 'gosmtp'),
 									'genErrTitle'   => esc_html__('Could not generate the password.', 'gosmtp'),
@@ -416,7 +397,7 @@ class Abilities{
 						<ul class="gosmtp-abilities-resource-list">
 							<li><a href="https://gosmtp.net/docs/ai-tools/how-to-setup-mcp-adapter-and-abilities/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('GoSMTP documentation', 'gosmtp'); ?></a><span class="gosmtp-abilities-resource-sub"><?php esc_html_e('Guides and tutorials', 'gosmtp'); ?></span></li>
 							<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Model Context Protocol', 'gosmtp'); ?></a><span class="gosmtp-abilities-resource-sub"><?php esc_html_e('What MCP is and how it works', 'gosmtp'); ?></span></li>
-							<li><a href="https://github.com/WordPress/mcp-adapter" target="_blank" rel="noopener noreferrer"><?php esc_html_e('WordPress MCP Adapter', 'gosmtp'); ?></a><span class="gosmtp-abilities-resource-sub"><?php esc_html_e('Official plugin repository', 'gosmtp'); ?></span></li>
+							<li><a href="https://wordpress.org/plugins/mcp-adapter/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('WordPress MCP Adapter', 'gosmtp'); ?></a><span class="gosmtp-abilities-resource-sub"><?php esc_html_e('Official plugin repository', 'gosmtp'); ?></span></li>
 						</ul>
 					</div>
 
@@ -596,36 +577,5 @@ class Abilities{
 			'ok'      => !empty($ok),
 			'message' => (string)$message,
 		]);
-	}
-
-	// Fetch the latest MCP Adapter release info from GitHub (cached 1 day).
-	static function get_mcp_adapter_release(){
-
-		$cached = get_transient(\GOSMTP\Abilities::$MCP_ADAPTER_RELEASE_CACHE);
-		if(false !== $cached && is_array($cached)){
-			return $cached;
-		}
-
-		$response = wp_remote_get(\GOSMTP\Abilities::$MCP_ADAPTER_RELEASE_URL, [
-			'timeout' => 10,
-			'headers' => ['Accept' => 'application/vnd.github+json'],
-		]);
-
-		if(is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)){
-			return [];
-		}
-
-		$body = json_decode(wp_remote_retrieve_body($response), true);
-		if(!is_array($body) || empty($body['tag_name']) || empty($body['assets'][0]['browser_download_url'])){
-			return [];
-		}
-
-		$payload = [
-			'version'      => ltrim((string)$body['tag_name'], 'v'),
-			'download_url' => esc_url_raw($body['assets'][0]['browser_download_url']),
-		];
-
-		set_transient(\GOSMTP\Abilities::$MCP_ADAPTER_RELEASE_CACHE, $payload, DAY_IN_SECONDS);
-		return $payload;
 	}
 }

@@ -4,7 +4,7 @@ Tags: smtp, wordpress smtp, gmail smtp, sendgrid smtp, aws smtp, gmail, outlook,
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.5
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,10 @@ Go To your WordPress install -> Plugins -> Add New Button -> In Search Box searc
 4. **Email Logs Wizard** check the emails sent with this wizard.
 
 == Changelog ==
+
+= 1.2.4 (October 07, 2026) =
+* [Security Fix Pro] There was an issue related to Email Logs that has been fixed, reported by **Rafie Muhammad - Awesome Motive, Inc** [Wordfence]
+* [Task] MCP adapter plugin now gets installed through the WordPress repo, and redundant code related to the old way of installing the MCP Adaptor has been removed.
 
 = 1.2.3 (September 23, 2026) =
 * [Improvement Pro] Added Code Signing: Every update now verifies the code signature to ensure secure updates.

@@ -9,7 +9,7 @@
 if (!defined('ABSPATH')) exit;
 
 define('GOSMTP_BASE', plugin_basename(GOSMTP_FILE));
-define('GOSMTP_VERSION', '1.2.3');
+define('GOSMTP_VERSION', '1.2.4');
 define('GOSMTP_DIR', dirname(GOSMTP_FILE));
 define('GOSMTP_SLUG', 'gosmtp');
 define('GOSMTP_URL', plugins_url('', GOSMTP_FILE));
@@ -99,6 +99,16 @@ function gosmtp_load_plugin(){
 	
 	// Check if the installed version is outdated
 	gosmtp_update_check();
+	
+	// There was an issue were for some users update was stuck, and free was able to get updated through auto updater option
+	// removing these filters fixes that issue, and our Pro update blocker was improved in 1.2.2
+	// This check can be removed 1 year from 07.10.2026
+	if(defined('GOSMTP_PRO_VERSION') && version_compare(GOSMTP_PRO_VERSION, '1.2.1', '=')){
+		foreach(['site_transient_update_plugins', 'pre_site_transient_update_plugins'] as $hook){
+			remove_filter($hook, 'gosmtp_pro_disable_manual_update_for_plugin'); // Older Pro used the default priority
+			remove_filter($hook, 'gosmtp_pro_disable_manual_update_for_plugin', 99);
+		}
+	}
 	
 	$options = get_option('gosmtp_options', array());
 	$gosmtp->options = empty($options) ? array() : $options;

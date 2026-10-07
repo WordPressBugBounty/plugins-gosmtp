@@ -343,7 +343,7 @@ jQuery(document).ready(function(){
 						headers_ = JSON.stringify(headers, null, 3);
 					}
           
-					dialog.find('.gosmtp-log-headers').html('<pre>'+headers_+'</pre>');
+					dialog.find('.gosmtp-log-headers').html(jQuery('<pre>').text(headers_));
 
 					var attachments = resp.attachments != undefined ? resp.attachments : '';
 					var attachments_count = 0;
@@ -354,14 +354,14 @@ jQuery(document).ready(function(){
 						attachments_count = attachments.length;
 					}
           
-					dialog.find('.gosmtp-log-attachments').html('<pre>'+attachments_+'</pre>');
+					dialog.find('.gosmtp-log-attachments').html(jQuery('<pre>').text(attachments_));
 					dialog.find('.gosmtp-attachment-count').text('('+attachments_count+')');
 
 					var response = resp.response != undefined ? resp.response : '';
 					if(typeof response == 'object' && Object.keys(response).length > 0){
 						response = JSON.stringify(response, null, 3);
 					}
-					dialog.find('.gosmtp-log-response').html('<pre>'+response+'</pre>');
+					dialog.find('.gosmtp-log-response').html(jQuery('<pre>').text(response));
 
 					var to = resp.to != undefined ? resp.to : 'NA';
 					dialog.find('.gosmtp-message-tos').text(to);

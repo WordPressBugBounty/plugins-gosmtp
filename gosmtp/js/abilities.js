@@ -80,8 +80,6 @@ jQuery(document).ready(function($){
 		var busyLabel = CFG.i18n.installing;
 		if(action === 'activate'){
 			busyLabel = CFG.i18n.activating;
-		}else if(action === 'update'){
-			busyLabel = CFG.i18n.updating;
 		}
 		$btn.html(busyLabel);
 		setMsg($area, '');
@@ -547,7 +545,6 @@ jQuery(document).ready(function($){
 		var defaults = {
 			installing:  'Installing...',
 			activating:  'Activating...',
-			updating:     'Updating...',
 			generating:  'Generating...',
 			testing:     'Testing...',
 			genErrTitle: 'Could not generate the password.',
